@@ -5,18 +5,19 @@ import (
 )
 
 type DBUser struct {
-	Id int
-
-	Status int
+	Id       int    `json:"-" form:"-"`
+	UserName string `json:"userName" form:"userName"`
+	UserPwd  string `json:"userPwd" form:"userPwd"`
+	Status   int    `json:"-" form:"-"`
 }
 
 // BackendUserOneByUserName 根据用户名密码获取单条
 func FindDBUserOneByUserName(username, userpwd string) (*DBUser, error) {
 	u := DBUser{}
-	err := orm.NewOrm().QueryTable(GetDBUserName()).Filter("username", username).Filter("userpwd", userpwd).One(&u)
-	if err != nil {
-		return nil, err
-	}
+	//err := orm.NewOrm().QueryTable(GetDBUserName()).Filter("username", username).Filter("userpwd", userpwd).One(&u)
+	//if err != nil {
+	//	return nil, err
+	//}
 	return &u, nil
 }
 

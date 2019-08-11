@@ -132,47 +132,49 @@ ntEbvmWXkRRHWcOe3yL5kCNZ+7Y22jbPAwCd+5Tdk2/DB52ZcxglAgMBAAE=
 -----END RSA Public Key-----`)
 //rsa加密解密 签名验签
 func test2() {
-	////生成私钥
-	//priv, e := rsa.GenerateKey(rand.Reader, 1024)
-	//if e != nil {
-	//	fmt.Println(e)
-	//}
-	//X509PrivateKey := x509.MarshalPKCS1PrivateKey(priv)
+	//生成私钥
+	priv, e := rsa.GenerateKey(rand.Reader, 1024)
+	if e != nil {
+		fmt.Println(e)
+	}
+	X509PrivateKey := x509.MarshalPKCS1PrivateKey(priv)
 	//privv := pem.EncodeToMemory(&pem.Block{Type: "RSA Private Key",Bytes:X509PrivateKey})
 
 	// 保存到文件
-	//privateFile, err := os.Create("tests/private_2.pem")
-	//if err!=nil{
-	//	panic(err)
-	//}
-	//defer privateFile.Close()
-	////构建一个pem.Block结构体对象
-	//privateBlock:= pem.Block{Type: "RSA Private Key",Bytes:X509PrivateKey}
-	////将数据保存到文件
-	//pem.Encode(privateFile,&privateBlock)
-
-	//pem解码
-	block, _ := pem.Decode(prik)
-	//x509解码
-	privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	privateFile, err := os.Create("tests/private_2.pem")
 	if err!=nil{
 		panic(err)
 	}
+	defer privateFile.Close()
+	//构建一个pem.Block结构体对象
+	privateBlock:= pem.Block{Type: "PRIVATE KEY",Bytes:X509PrivateKey}
+	//将数据保存到文件
+	pem.Encode(privateFile,&privateBlock)
 
-	//根据私钥产生公钥
-	pub := &privateKey.PublicKey
-
-	//pubby := x509.MarshalPKCS1PublicKey(pub)
-	////保存到文件
-	//publicFile, err := os.Create("tests/public_2.pem")
+	////pem解码
+	//block, _ := pem.Decode(prik)
+	////x509解码
+	//privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 	//if err!=nil{
 	//	panic(err)
 	//}
-	//defer publicFile.Close()
-	////构建一个pem.Block结构体对象
-	//privateBlock:= pem.Block{Type: "RSA Public Key",Bytes:pubby}
-	////将数据保存到文件
-	//pem.Encode(publicFile,&privateBlock)
+
+	//根据私钥产生公钥
+	pub := &priv.PublicKey
+
+	pubby := x509.MarshalPKCS1PublicKey(pub)
+	// 这个生成的密钥在 jsencrypt 中 使用 失败
+	//pubby,_ := x509.MarshalPKIXPublicKey(pub)
+	//保存到文件
+	publicFile, err := os.Create("tests/public_2.pem")
+	if err!=nil{
+		panic(err)
+	}
+	defer publicFile.Close()
+	//构建一个pem.Block结构体对象
+	publicBlock:= pem.Block{Type: "PUBLIC KEY",Bytes:pubby}
+	//将数据保存到文件
+	pem.Encode(publicFile,&publicBlock)
 
 	//明文
 	plaintext := []byte("Hello world")
@@ -186,7 +188,7 @@ func test2() {
 
 	//解密得到明文
 	fmt.Printf("解密:\n")
-	plaintext, e = rsa.DecryptOAEP(md5.New(), rand.Reader, privateKey, ciphertext, nil)
+	plaintext, e = rsa.DecryptOAEP(md5.New(), rand.Reader, priv, ciphertext, nil)
 	if e != nil {
 		fmt.Println(e)
 	}
@@ -201,7 +203,7 @@ func test2() {
 
 	//签名
 	opts := &rsa.PSSOptions{SaltLength: rsa.PSSSaltLengthAuto, Hash: crypto.MD5}
-	sig, e := rsa.SignPSS(rand.Reader, privateKey, crypto.MD5, hashed, opts)
+	sig, e := rsa.SignPSS(rand.Reader, priv, crypto.MD5, hashed, opts)
 	if e != nil {
 		fmt.Println(e)
 	}
@@ -256,7 +258,7 @@ func GenerateRSAKey(bits int){
 	}
 	defer privateFile.Close()
 	//构建一个pem.Block结构体对象
-	privateBlock:= pem.Block{Type: "RSA Private Key",Bytes:X509PrivateKey}
+	privateBlock:= pem.Block{Type: "RSA PRIVATE KEY",Bytes:X509PrivateKey}
 	//将数据保存到文件
 	pem.Encode(privateFile,&privateBlock)
 
@@ -276,7 +278,7 @@ func GenerateRSAKey(bits int){
 	}
 	defer publicFile.Close()
 	//创建一个pem.Block结构体对象
-	publicBlock:= pem.Block{Type: "RSA Public Key",Bytes:X509PublicKey}
+	publicBlock:= pem.Block{Type: "RSA PUBLIC KEY",Bytes:X509PublicKey}
 	//保存到文件
 	pem.Encode(publicFile,&publicBlock)
 }

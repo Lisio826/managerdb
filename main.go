@@ -3,15 +3,31 @@ package main
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/plugins/cors"
-	"managedb/controllers"
-	_ "managedb/routers"
+	"managerdb/logs"
+	_ "managerdb/routers"
 )
+
+func init() {
+	////跨域设置
+	//var FilterGateWay = func(ctx *context.Context) {
+	//	ctx.ResponseWriter.Header().Set("Access-Control-Allow-Origin", "*")
+	//	//允许访问源
+	//	ctx.ResponseWriter.Header().Set("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS")
+	//	//允许post访问
+	//	ctx.ResponseWriter.Header().Set("Access-Control-Allow-Headers", "Access-Control-Allow-Origin,ContentType,Authorization,accept,accept-encoding, authorization, content-type") //header的类型
+	//	ctx.ResponseWriter.Header().Set("Access-Control-Max-Age", "1728000")
+	//	ctx.ResponseWriter.Header().Set("Access-Control-Allow-Credentials", "true")
+	//}
+	//beego.InsertFilter("*", beego.BeforeRouter, FilterGateWay)
+
+}
 
 func main() {
 
-	beego.BConfig.Log.AccessLogs = true
-	beego.BConfig.Log.FileLineNum = true
-	beego.BConfig.Log.Outputs = map[string]string{"console": ""}
+	ok := logs.ConfigLog()
+	if !ok {
+		return
+	}
 
 	beego.BConfig.WebConfig.Session.SessionOn = true
 	beego.BConfig.WebConfig.Session.SessionName = "sessionID"
@@ -25,17 +41,13 @@ func main() {
 		//其中Options跨域复杂请求预检
 		AllowMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		//指的是允许的Header的种类
-		AllowHeaders: []string{"Origin", "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type"},
+		AllowHeaders: []string{"_c", "Origin", "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type"}, //"Origin", "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type"
 		//公开的HTTP标头列表
-		ExposeHeaders: []string{"Content-Length", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type"},
+		ExposeHeaders: []string{"Content-Length", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type"}, //"Content-Length", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type"
 		//如果设置，则允许共享身份验证凭据，例如cookie
 		AllowCredentials: true,
+		//AllowOrigins:     []string{"*"},
 	}))
-	//路由设置
-	ns := beego.NewNamespace("/v1",
-		//  用于跨域请求
-		beego.NSRouter("*", &controllers.BaseController{}, "OPTIONS:Options"), )
-	beego.AddNamespace(ns)
 
 	beego.Run()
 }
