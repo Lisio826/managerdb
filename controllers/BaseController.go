@@ -11,7 +11,7 @@ type BaseController struct {
 	beego.Controller
 	controllerName string        //当前控制名称
 	actionName     string        //当前action名称
-	curUser        models.DBUser //当前用户信息
+	curUser        models.DbUser //当前用户信息
 }
 
 func (c *BaseController) Options() {

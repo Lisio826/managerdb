@@ -1,7 +1,7 @@
 package test
 
 import (
-	_ "managedb/routers"
+	_ "managerdb/routers"
 	"path/filepath"
 	"runtime"
 	"testing"

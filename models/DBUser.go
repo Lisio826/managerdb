@@ -4,27 +4,32 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-type DBUser struct {
+type DbUser struct {
 	Id       int    `json:"-" form:"-"`
 	UserName string `json:"userName" form:"userName"`
-	UserPwd  string `json:"userPwd" form:"userPwd"`
-	Status   int    `json:"-" form:"-"`
+	UserPwd  string `json:"userPwd" form:"userPwd""`
+	UserStatus   int    `json:"-" form:"-"`
+}
+
+// TableName 设置BackendUser表名
+func (a *DbUser) TableName() string {
+	return GetDBUserName()
 }
 
 // BackendUserOneByUserName 根据用户名密码获取单条
-func FindDBUserOneByUserName(username, userpwd string) (*DBUser, error) {
-	u := DBUser{}
-	//err := orm.NewOrm().QueryTable(GetDBUserName()).Filter("username", username).Filter("userpwd", userpwd).One(&u)
-	//if err != nil {
-	//	return nil, err
-	//}
+func FindDBUserOneByUserName(username, userpwd string) (*DbUser, error) {
+	u := DbUser{}
+	err := orm.NewOrm().QueryTable(GetDBUserName()).Filter("username", username).Filter("userpwd", userpwd).One(&u)
+	if err != nil {
+		return nil, err
+	}
 	return &u, nil
 }
 
 // BackendUserOne 根据id获取单条
-func DBUserOne(id int) (*DBUser, error) {
+func DBUserOne(id int) (*DbUser, error) {
 	o := orm.NewOrm()
-	m := DBUser{Id: id}
+	m := DbUser{Id: id}
 	err := o.Read(&m)
 	if err != nil {
 		return nil, err

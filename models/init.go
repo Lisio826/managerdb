@@ -1,13 +1,15 @@
 package models
 
-import "github.com/astaxie/beego"
+import (
+	"github.com/astaxie/beego"
+)
 
 func init() {
 
 }
 
 func TableName(name string) string  {
-	pre := beego.AppConfig.String("db_prefix")
+	pre := beego.AppConfig.String("db_dt_prefix")
 	return pre + name
 }
 

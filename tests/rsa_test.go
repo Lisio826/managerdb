@@ -6,6 +6,7 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
+	"encoding/hex"
 	"encoding/pem"
 	"errors"
 	"fmt"
@@ -137,7 +138,7 @@ func test2() {
 	if e != nil {
 		fmt.Println(e)
 	}
-	X509PrivateKey := x509.MarshalPKCS1PrivateKey(priv)
+	X509PrivateKey,_ := x509.MarshalPKIXPublicKey(priv)
 	//privv := pem.EncodeToMemory(&pem.Block{Type: "RSA Private Key",Bytes:X509PrivateKey})
 
 	// 保存到文件
@@ -162,7 +163,7 @@ func test2() {
 	//根据私钥产生公钥
 	pub := &priv.PublicKey
 
-	pubby := x509.MarshalPKCS1PublicKey(pub)
+	pubby,_ := x509.MarshalPKIXPublicKey(pub)
 	// 这个生成的密钥在 jsencrypt 中 使用 失败
 	//pubby,_ := x509.MarshalPKIXPublicKey(pub)
 	//保存到文件
@@ -344,4 +345,23 @@ func RsaDecrypt(cipherText []byte,path string) []byte{
 	plainText,_:=rsa.DecryptPKCS1v15(rand.Reader,privateKey,cipherText)
 	//返回明文
 	return plainText
+}
+
+
+//将字符串加密成 md5
+func String2md5(str string) string {
+	data := []byte(str)
+	has := md5.Sum(data)
+	return fmt.Sprintf("%x", has) //将[]byte转成16进制
+}
+// 生成32位MD5
+func MD5(text string) string {
+	ctx := md5.New()
+	ctx.Write([]byte(text))
+	return hex.EncodeToString(ctx.Sum(nil))
+}
+
+func Test(t *testing.T)  {
+	fmt.Println(String2md5("abc123_Ab123"))
+	//fmt.Println(MD5("abc"))
 }

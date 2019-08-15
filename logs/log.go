@@ -25,7 +25,7 @@ func ConfigLog() bool {
 	beego.BConfig.Log.AccessLogs = true
 	beego.BConfig.Log.FileLineNum = true
 
-	logconf, err := config2.NewConfig("ini", "log.conf")
+	logconf, err := config2.NewConfig("ini", "conf/log.conf")
 	if err != nil {
 		fmt.Println(err.Error())
 		return false

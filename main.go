@@ -2,9 +2,14 @@ package main
 
 import (
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/plugins/cors"
+	_ "github.com/go-sql-driver/mysql"
 	"managerdb/logs"
+	"managerdb/models"
+	_ "managerdb/models"
 	_ "managerdb/routers"
+	"time"
 )
 
 func init() {
@@ -28,6 +33,16 @@ func main() {
 	if !ok {
 		return
 	}
+
+	//orm.RegisterModel(new(models.DBUser))
+	//orm.RegisterDriver("mysql",orm.DRMySQL)
+	maxIdle := 30
+	maxConn := 30
+	orm.RegisterDataBase("default", "mysql", "root:123456@tcp(localhost:3306)/managerdb?charset=utf8", maxIdle, maxConn)
+	orm.DefaultTimeLoc = time.UTC
+
+	orm.RegisterModel(new(models.DbUser))
+	orm.Debug = true
 
 	beego.BConfig.WebConfig.Session.SessionOn = true
 	beego.BConfig.WebConfig.Session.SessionName = "sessionID"
