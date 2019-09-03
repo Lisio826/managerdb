@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/base64"
 	"managerdb/enums"
+	"managerdb/log"
 	"managerdb/models"
 	"managerdb/utils"
 )
@@ -41,7 +42,7 @@ func (c *HomeController)Login() {
 	userpwd := string(pwd)
 
 	userpwd = utils.String2md5(userpwd+enums.PwdSalt)
-	//
+	log.MainLogger.Debug(userpwd)
 	dbuser, err := models.FindDBUserOneByUserName(username,userpwd)
 	if err != nil || dbuser == nil {
 		c.jsonResult(enums.JRCodeFailed,"用户名或密码错误","")

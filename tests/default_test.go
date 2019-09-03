@@ -1,6 +1,7 @@
 package test
 
 import (
+	"fmt"
 	_ "managerdb/routers"
 	"path/filepath"
 	"runtime"
@@ -19,6 +20,9 @@ func init() {
 
 // TestBeego is a sample to run an endpoint test
 func TestBeego(t *testing.T) {
+	ssname := "获取%s数据失败"
+	ssname = fmt.Sprintf(ssname,"福建")
+	fmt.Println(ssname)
 	//r, _ := http.NewRequest("GET", "/", nil)
 	//w := httptest.NewRecorder()
 	//beego.BeeApp.Handlers.ServeHTTP(w, r)

@@ -5,7 +5,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/plugins/cors"
 	_ "github.com/go-sql-driver/mysql"
-	"managerdb/logs"
+	_ "managerdb/log"
 	"managerdb/models"
 	_ "managerdb/models"
 	_ "managerdb/routers"
@@ -29,10 +29,10 @@ func init() {
 
 func main() {
 
-	ok := logs.ConfigLog()
-	if !ok {
-		return
-	}
+	//ok := logs.ConfigLog()
+	//	//if !ok {
+	//	//	return
+	//	//}
 
 	//orm.RegisterModel(new(models.DBUser))
 	//orm.RegisterDriver("mysql",orm.DRMySQL)
