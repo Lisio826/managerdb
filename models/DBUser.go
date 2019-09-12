@@ -5,10 +5,10 @@ import (
 )
 
 type DbUser struct {
-	Id       int    `json:"-" form:"-"`
-	UserName string `json:"userName" form:"userName"`
-	UserPwd  string `json:"userPwd" form:"userPwd""`
-	UserStatus   int    `json:"-" form:"-"`
+	Id       int    `json:"-" form:"-" orm:"id"`
+	UserName string `json:"userName" form:"userName" orm:"userName"`
+	UserPwd  string `json:"userPwd" form:"userPwd" orm:"userPwd"`
+	UserStatus   int    `json:"-" form:"userStatus" orm:"userStatus"`
 }
 
 // TableName 设置BackendUser表名

@@ -12,7 +12,7 @@ var LmdbLogger *zap.Logger
 var HttpLogger *zap.Logger
 
 func init() {
-	MainLogger = NewLogger("./logs/manager.log", zapcore.DebugLevel, 128, 30, 7, true, "Main")
+	MainLogger = NewLogger("./logs/manager.log", zapcore.DebugLevel, 1, 2, 7, true, "Main")
 	//GatewayLogger = NewLogger("./logs/gateway.log", zapcore.DebugLevel, 128, 30, 7, true, "Gateway")
 }
 

@@ -1,21 +1,25 @@
 package test
 
 import (
-	"fmt"
-	"maotai/log"
+	"managerdb/log"
 	"testing"
 )
 
 func Test_Des(t *testing.T) {
-	keyword := "山东省济南市槐荫区蓝翔高级中学高一271班团支部"
-	rs := []rune(keyword)
-	keyword = string(rs[0:8])
-	log.Print(keyword)
 
-	ident := "340122199901142624"
-	month := ident[10:12]
-	year := ident[6:10]
-	fmt.Println(month,year)
+	 for true{
+		 log.MainLogger.Debug("测试使用的0 。。。。。。。。。。。。。。。。。。。。。。。")
+	 }
+
+	//keyword := 山东省济南市槐荫区蓝翔高级中学高一271班团支部"
+	//rs := []rune(keyword)
+	//keyword = string(rs[0:8])
+	//log.Print(keyword)
+	//
+	//ident := "340122199901142624"
+	//month := ident[10:12]
+	//year := ident[6:10]
+	//fmt.Println(month,year)
 
 	///*
 	//	DSA只能做签名 验签 无法做加密
