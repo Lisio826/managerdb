@@ -8,6 +8,9 @@ const (
 	JRCode401 = 401 //未授权访问
 
 	PwdSalt = "_Ab123"
+
+	UserEnabled = true
+	UserDisabled = false
 )
 
 const (

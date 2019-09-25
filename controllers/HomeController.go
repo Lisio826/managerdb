@@ -48,11 +48,20 @@ func (c *HomeController)Login() {
 		c.jsonResult(enums.JRCodeFailed,"用户名或密码错误","")
 	}
 	if dbuser != nil{
-		if dbuser.UserStatus == enums.Disabled{
-			c.jsonResult(enums.JRCodeFailed, "用户被禁用，请联系管理员", "")
+		if dbuser.UserStatus == enums.UserDisabled{
+			c.jsonResult(enums.JRCodeFailed, "用户被禁用，不可登录", "")
 		}
-		////保存用户信息到session
+		//保存用户信息到session beego的orm用法
 		//c.setDBUser2Session(dbuser.Id)
+		c.SetSession("db_user",dbuser)
+		////删除指定的session
+		//c.DelSession("loginuser")
+		////销毁全部的session
+		//c.DestroySession()
+		//c.Data["json"]=map[string]interface{}{"islogin":islogin};
+		//c.ServeJSON();
+		/////////////////////////////////
+
 		//获取用户信息
 		c.jsonResult(enums.JRCodeSucc, "登录成功", "")
 	}

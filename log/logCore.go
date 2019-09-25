@@ -4,7 +4,6 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
-	"os"
 )
 
 // https://studygolang.com/articles/17394
@@ -66,8 +65,8 @@ func newCore(filePath string, level zapcore.Level, maxSize int, maxBackups int, 
 		EncodeName:     zapcore.FullNameEncoder,
 	}
 	return zapcore.NewCore(
-		zapcore.NewJSONEncoder(encoderConfig),                                           // 编码器配置
-		zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout), zapcore.AddSync(&hook)), // 打印到控制台和文件
-		atomicLevel,                                                                     // 日志级别
+		zapcore.NewJSONEncoder(encoderConfig),               // 编码器配置
+		zapcore.NewMultiWriteSyncer(zapcore.AddSync(&hook)), // 打印到控制台和文件 zapcore.AddSync(os.Stdout),zapcore.AddSync(&hook)
+		atomicLevel,                                         // 日志级别
 	)
 }

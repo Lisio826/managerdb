@@ -10,9 +10,13 @@ var GatewayLogger *zap.Logger
 var RedisLogger *zap.Logger
 var LmdbLogger *zap.Logger
 var HttpLogger *zap.Logger
+var PprofLogger *zap.Logger
+var MonitorLogger *zap.Logger
 
 func init() {
 	MainLogger = NewLogger("./logs/manager.log", zapcore.DebugLevel, 1, 2, 7, true, "Main")
+	PprofLogger = NewLogger("./logs/pprofLogger.log", zapcore.InfoLevel, 512, 12, 7, true, "pprof")
+	MonitorLogger = NewLogger("./logs/monitorLogger.log", zapcore.InfoLevel, 512, 12, 7, true, "monitor")
 	//GatewayLogger = NewLogger("./logs/gateway.log", zapcore.DebugLevel, 128, 30, 7, true, "Gateway")
 }
 
