@@ -54,8 +54,8 @@ func Test_Des(t *testing.T) {
 	i := 1
 	for i <= 15 {
 
-		log.PprofLogger.Info(fmt.Sprintf(" ------------------------------------ DB %d ------------------------------------ ",i))
-		log.MonitorLogger.Info(fmt.Sprintf(" ------------------------------------ DB %d ------------------------------------ ",i))
+		log.PprofLogger.Info(fmt.Sprintf(" ------------------------------------ server %d ------------------------------------ ",i))
+		log.MonitorLogger.Info(fmt.Sprintf(" ------------------------------------ server %d ------------------------------------ ",i))
 
 		pprof := fmt.Sprintf("http://172.22.125.%d:4345/v1/maotai/pprof/?time=%d", i, time.Now().Unix())
 		monitor := fmt.Sprintf("http://172.22.125.%d:4345/v1/maotai/monitor?time=%d", i, time.Now().Unix())
@@ -74,16 +74,16 @@ func Test_Des(t *testing.T) {
 		re4 := rr["MessageChan"]
 		re5 := rr["PanicError"]
 		//re1 := "NumGoroutine : " + rr.Getdata()["NumGoroutine"]
-		log.MonitorLogger.Info("NumGoroutine》》" + fmt.Sprint(re1))
+		log.MonitorLogger.Info("NumGoroutine==》》--" + fmt.Sprint(re1))
 		//mm := rr.Getdata()
 		//re2 := mm["DbStatus"]
-		log.MonitorLogger.Info("DbStatus》》" + fmt.Sprint(re2))
+		log.MonitorLogger.Info("DbStatus==》》--" + fmt.Sprint(re2))
 		//re3 := "ApiStatus : " + rr.Get("ApiStatus").Tostring()
-		log.MonitorLogger.Info("ApiStatus》》" + fmt.Sprint(re3))
+		log.MonitorLogger.Info("ApiStatus==》》--" + fmt.Sprint(re3))
 		//re4 := "MessageChan : " + rr.Get("MessageChan").Tostring()
-		log.MonitorLogger.Info("MessageChan》》" + fmt.Sprint(re4))
+		log.MonitorLogger.Info("MessageChan==》》--" + fmt.Sprint(re4))
 
-		log.MonitorLogger.Info("PanicError》》" + fmt.Sprint(re5))
+		log.MonitorLogger.Info("PanicError==》》--" + fmt.Sprint(re5))
 		i = i + 1
 		if i == 16 {
 
