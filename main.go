@@ -9,6 +9,15 @@ import (
 	_ "managerdb/routers"
 )
 
+/**
+ * 使用 beego 作为服务框架，MVC模式
+ * 数据驱动用 xorm（可批量查询） ：https://blog.csdn.net/kenkao/article/details/91429282
+ * 使用 cap 用来记录日志
+ * 使用 ants 用来作为线程池
+ * 使用 redis 存储部分数据
+ * 验证使用 session + jwt
+ */
+
 func init() {
 	////跨域设置
 	//var FilterGateWay = func(ctx *context.Context) {
