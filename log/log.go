@@ -15,8 +15,8 @@ var MonitorLogger *zap.Logger
 
 func init() {
 	MainLogger = NewLogger("./logs/manager.log", zapcore.DebugLevel, 1, 2, 7, true, "Main")
-	PprofLogger = NewLogger("./logs/pprofLogger.log", zapcore.InfoLevel, 128, 12, 7, true, "pprof")
-	MonitorLogger = NewLogger("./logs/monitorLogger.log", zapcore.InfoLevel, 128, 12, 7, true, "monitor")
+	//PprofLogger = NewLogger("./logs/pprofLogger.log", zapcore.InfoLevel, 128, 12, 7, true, "pprof")
+	//MonitorLogger = NewLogger("./logs/monitorLogger.log", zapcore.InfoLevel, 128, 12, 7, true, "monitor")
 	//GatewayLogger = NewLogger("./logs/gateway.log", zapcore.DebugLevel, 128, 30, 7, true, "Gateway")
 }
 
