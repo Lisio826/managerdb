@@ -10,9 +10,6 @@ import (
 	"fmt"
 )
 
-
-
-
 var privateKey = []byte(`-----BEGIN RSA PRIVATE KEY-----
 MIICWwIBAAKBgQCXrYqCy3fYvwoSNBZ9q0xc6EVxlGTQWr9hm1hrpCCid1/C+kX2
 sZlT1YJo+IZ47KaY+tN+sEXujTugWT7BJzz44bv2NUELZCEoNCsHpXsGJh0FzGcJ
@@ -41,9 +38,6 @@ func RsaDecrypt(cipherText []byte) ([]byte, error) {
 	return rsa.DecryptPKCS1v15(rand.Reader, priv, cipherText) //RSA算法解密
 }
 
-
-
-
 var prik = []byte(`-----BEGIN PRIVATE KEY-----
 MIICXQIBAAKBgQDn5Yn0vWX1Fr3OwbQWqHgRxG4N6AHKU16Ad4+uy5vw7PSJRce6
 sR8cte0HW0KOv7nvl+bBBrs3gpMenUdkmN+HjkQBUlyKVfmFSNvoTpEcdn2vu2UR
@@ -65,7 +59,7 @@ func DecodeRSA(str string) string {
 	block, _ := pem.Decode(prik)
 	//x509解码
 	privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
-	if err!=nil{
+	if err != nil {
 		panic(err)
 	}
 	plaintext, e := rsa.DecryptOAEP(md5.New(), rand.Reader, privateKey, []byte(str), nil)
@@ -81,6 +75,7 @@ func String2md5(str string) string {
 	has := md5.Sum(data)
 	return fmt.Sprintf("%x", has) //将[]byte转成16进制
 }
+
 //func MD5(text string) string {
 //	ctx := md5.New()
 //	ctx.Write([]byte(text))

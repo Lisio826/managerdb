@@ -12,21 +12,21 @@ type DbUser struct {
 	UserStatus int    `json:"-" form:"userStatus" orm:"userStatus"`
 }
 type TManageUser struct {
-	Id          int       `db:"id" json:"id"`
-	FullName    string    `db:"real_name" json:"real_name"`
-	Surname     string    `db:"surname" json:"surname"`
-	Name        string    `db:"name" json:"name"`
-	UserCode    string    `db:"user_code" json:"user_code"`
-	Identity    string    `db:"identity" json:"identity"`
-	UserStatus  bool      `db:"user_status" json:"user_status"`
-	UserPwd     string    `db:"user_pwd" json:"user_pwd"`
-	Mobile      string    `db:"mobile" json:"mobile"`
-	Email       string    `db:"email" json:"email"`
-	RoleId      int       `db:"role_id" json:"role_id"`
-	Avatar      string    `db:"avatar" json:"avatar"`
-	AddTime     time.Time `db:"add_time" json:"add_time"`
-	OperateUser string    `db:"operate_user" json:"operate_user"`
-	UpdateTime  time.Time `db:"update_time" json:"update_time"`
+	Id          int       `json:"id"`
+	FullName    string    `json:"fullName"`
+	Surname     string    `json:"surname"`
+	Name        string    `json:"name"`
+	UserCode    string    `json:"userCode"`
+	Identity    string    `json:"identity"`
+	UserStatus  bool      `json:"userStatus"`
+	UserPwd     string    `json:"userPwd"`
+	Mobile      string    `json:"mobile"`
+	Email       string    `json:"email"`
+	RoleId      int       `json:"roleId"`
+	Avatar      string    `json:"avatar"`
+	AddTime     time.Time `json:"addTime"`
+	OperateUser string    `json:"operateUser"`
+	UpdateTime  time.Time `json:"updateTime"`
 }
 
 // TableName 设置BackendUser表名
