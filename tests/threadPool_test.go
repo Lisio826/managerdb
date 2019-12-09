@@ -2,7 +2,7 @@ package test
 
 import (
 	"fmt"
-	"github.com/panjf2000/ants"
+	"github.com/panjf2000/ants/v2"
 	"sync"
 	"testing"
 	"time"
