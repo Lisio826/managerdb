@@ -3,9 +3,9 @@ package main
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/plugins/cors"
-	_ "github.com/go-sql-driver/mysql"
-	_ "managerdb/log"
-	_ "managerdb/models"
+	"managerdb/conf"
+	"managerdb/logger"
+	"managerdb/models"
 	_ "managerdb/routers"
 )
 
@@ -17,7 +17,6 @@ import (
  * 使用 redis 存储部分数据
  * 验证使用 session + jwt
  */
-
 func init() {
 	////跨域设置
 	//var FilterGateWay = func(ctx *context.Context) {
@@ -30,6 +29,10 @@ func init() {
 	//	ctx.ResponseWriter.Header().Set("Access-Control-Allow-Credentials", "true")
 	//}
 	//beego.InsertFilter("*", beego.BeforeRouter, FilterGateWay)
+
+	conf.Global.GetConf()
+	logger.InitLog()
+	models.InitDb()
 
 }
 

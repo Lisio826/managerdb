@@ -18,4 +18,3 @@ const (
 	Disabled
 	Enabled
 )
-

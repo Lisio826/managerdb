@@ -14,6 +14,6 @@ func init() {
 		beego.NSRouter("*", &controllers.BaseController{}, "OPTIONS:Options"), )
 	beego.AddNamespace(ns)
 
-    beego.Router("/v1/home/login",&controllers.HomeController{},"*:Login")
-
+    //beego.Router("/v1/home/login",&controllers.HomeController{},"*:Login")
+	beego.Include(&controllers.HomeController{})
 }

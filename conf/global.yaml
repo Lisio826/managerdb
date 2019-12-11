@@ -1,0 +1,4 @@
+ignoredbs: information_schema,performance_schema,mysql,sys,test
+logPath:
+  logLocal: ./logs/manager.log
+  logdb: ./logs/db.log

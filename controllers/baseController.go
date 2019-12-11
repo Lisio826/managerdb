@@ -1,19 +1,22 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/astaxie/beego"
 	"managerdb/enums"
+	"managerdb/logger"
 	"managerdb/models"
 )
-
 type BaseController struct {
 	beego.Controller
 	controllerName string        //当前控制名称
 	actionName     string        //当前action名称
-	curUser        models.DbUser //当前用户信息
+	curUser        models.TManageUser //当前用户信息
 }
-
+//var l *zap.SugaredLogger
+//func InitLog() {
+//	fmt.Println("================================")
+//	l = logger.MainLogger
+//}
 func (c *BaseController) Options() {
 	c.Data["json"] = map[string]interface{}{"status": 200, "message": "ok", "moreinfo": ""}
 	c.ServeJSON()
@@ -23,8 +26,7 @@ func (c *BaseController) Prepare() {
 	//c.Ctx.ResponseWriter.Header().Set("Access-Control-Allow-Origin", c.Ctx.Request.Header.Get("Origin"))
 	//附值
 	c.controllerName, c.actionName = c.GetControllerAndAction()
-
-	fmt.Print(c)
+	logger.Debug(c.controllerName,c.actionName)
 
 	//log.Print(strings.TrimSpace(c.GetString("userName")))
 	//log.Print(strings.TrimSpace(c.GetString("userPwd")))
@@ -37,18 +39,18 @@ func (c *BaseController) Prepare() {
 
 //// checkLogin判断用户是否登录，未登录则跳转至登录页面
 //// 一定要在BaseController.Prepare()后执行
-//func (c *BaseController) checkLogin() {
-//	if c.curUser.Id == 0 {
-//		//登录成功后返回的址为当前
-//		returnURL := c.Ctx.Request.URL.Path
-//
-//		if c.Ctx.Input.IsPost() {
-//			//returnURL := c.Ctx.Input.Refer()
-//			c.jsonResult(enums.JRCode302, "请登录", returnURL)
-//		}
-//		c.StopRun()
-//	}
-//}
+func (c *BaseController) checkLogin() {
+	if c.curUser.Id == 0 {
+		//登录成功后返回的址为当前
+		returnURL := c.Ctx.Request.URL.Path
+
+		if c.Ctx.Input.IsPost() {
+			//returnURL := c.Ctx.Input.Refer()
+			c.jsonResult(enums.JRCode302, "请登录", returnURL)
+		}
+		c.StopRun()
+	}
+}
 
 func (c *BaseController) jsonResult(code enums.JsonResultCode, msg string, obj interface{}) {
 	r := &models.JsonResult{code, msg, obj}

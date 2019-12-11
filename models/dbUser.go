@@ -5,13 +5,8 @@ import (
 	"time"
 )
 
-type DbUser struct {
-	Id         int    `json:"-" form:"-" orm:"id"`
-	UserName   string `json:"userName" form:"userName" orm:"userName"`
-	UserPwd    string `json:"userPwd" form:"userPwd" orm:"userPwd"`
-	UserStatus int    `json:"-" form:"userStatus" orm:"userStatus"`
-}
 type TManageUser struct {
+	Account		string	`json:"account"`
 	Id          int       `json:"id"`
 	FullName    string    `json:"fullName"`
 	Surname     string    `json:"surname"`
@@ -29,10 +24,28 @@ type TManageUser struct {
 	UpdateTime  time.Time `json:"updateTime"`
 }
 
-// TableName 设置BackendUser表名
-func (a *DbUser) TableName() string {
-	return GetDBUserName()
+func FindDBUserOneByUserName(usercode, userpwd string) (*TManageUser, error) {
+	tManageUser := &TManageUser{UserCode: usercode, UserPwd: userpwd}
+	has, err := engine.Get(tManageUser)
+	if err != nil || !has {
+		return nil, errors.New("查无此用户")
+	}
+	return tManageUser, nil
 }
+
+/* beego orm */
+
+//type DbUser struct {
+//	Id         int    `json:"-" form:"-" orm:"id"`
+//	UserName   string `json:"userName" form:"userName" orm:"userName"`
+//	UserPwd    string `json:"userPwd" form:"userPwd" orm:"userPwd"`
+//	UserStatus int    `json:"-" form:"userStatus" orm:"userStatus"`
+//}
+
+// TableName 设置BackendUser表名
+//func (a *DbUser) TableName() string {
+//	return GetDBUserName()
+//}
 
 // BackendUserOneByUserName 根据用户名密码获取单条
 //func FindDBUserOneByUserName(username, userpwd string) (*DbUser, error) {
@@ -43,14 +56,6 @@ func (a *DbUser) TableName() string {
 //	}
 //	return &u, nil
 //}
-func FindDBUserOneByUserName(usercode, userpwd string) (*TManageUser, error) {
-	tManageUser := &TManageUser{UserCode: usercode, UserPwd: userpwd}
-	has, err := engine.Get(tManageUser)
-	if err != nil || !has {
-		return nil, errors.New("查无此用户")
-	}
-	return tManageUser, nil
-}
 
 //// BackendUserOne 根据id获取单条
 //func DBUserOne(id int) (*DbUser, error) {

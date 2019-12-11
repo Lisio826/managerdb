@@ -3,7 +3,7 @@ package controllers
 import (
 	"encoding/base64"
 	"managerdb/enums"
-	"managerdb/log"
+	"managerdb/logger"
 	"managerdb/models"
 	"managerdb/utils"
 )
@@ -11,7 +11,11 @@ import (
 type HomeController struct {
 	BaseController
 }
+func (c *HomeController) URLMapping() {
+	c.Mapping("Login", c.Login)
+}
 
+// @router /v1/home/login [*]
 func (c *HomeController)Login() {
 	//username := strings.TrimSpace(c.GetString("userName"))
 	//userpwd := strings.TrimSpace(c.GetString("userPwd"))
@@ -23,18 +27,18 @@ func (c *HomeController)Login() {
 	//	c.jsonResult(enums.JRCodeFailed, "用户名或密码不正确", "")
 	//}
 
-	var user models.DbUser
+	var user models.TManageUser
 	data := c.Ctx.Input.RequestBody
 	//json数据封装到user对象中
 	ok := utils.Byte2Struct(data, &user)
-	if !ok && (len(user.UserName) == 0 || len(user.UserPwd) == 0) {
+	if !ok && (len(user.Account) == 0 || len(user.UserPwd) == 0) {
 		c.jsonResult(enums.JRCodeFailed, "用户名或密码不正确", "")
 	}
 
 	//username := utils.DecodeRSA(user.UserName)
 	//userpwd := utils.DecodeRSA(user.UserPwd)
 	//私钥
-	decodeBytesId, _ := base64.StdEncoding.DecodeString(user.UserName)
+	decodeBytesId, _ := base64.StdEncoding.DecodeString(user.Account)
 	id, err := utils.RsaDecrypt(decodeBytesId) //RSA解密
 	username := string(id)
 	decodeBytesPwd, _ := base64.StdEncoding.DecodeString(user.UserPwd)
@@ -42,7 +46,7 @@ func (c *HomeController)Login() {
 	userpwd := string(pwd)
 
 	userpwd = utils.String2md5(userpwd+enums.PwdSalt)
-	log.MainLogger.Debug(userpwd)
+	logger.MainLogger.Debug(userpwd)
 	dbuser, err := models.FindDBUserOneByUserName(username,userpwd)
 	if err != nil || dbuser == nil {
 		c.jsonResult(enums.JRCodeFailed,"用户名或密码错误","")
