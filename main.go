@@ -33,7 +33,6 @@ func init() {
 	conf.Global.GetConf()
 	logger.InitLog()
 	models.InitDb()
-
 }
 
 func main() {

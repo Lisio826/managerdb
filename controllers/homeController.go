@@ -11,9 +11,9 @@ import (
 type HomeController struct {
 	BaseController
 }
-func (c *HomeController) URLMapping() {
-	c.Mapping("Login", c.Login)
-}
+//func (c *HomeController) URLMapping() {
+//	c.Mapping("Login", c.Login)
+//}
 
 // @router /v1/home/login [*]
 func (c *HomeController)Login() {
@@ -46,7 +46,7 @@ func (c *HomeController)Login() {
 	userpwd := string(pwd)
 
 	userpwd = utils.String2md5(userpwd+enums.PwdSalt)
-	logger.MainLogger.Debug(userpwd)
+	logger.Debug(userpwd)
 	dbuser, err := models.FindDBUserOneByUserName(username,userpwd)
 	if err != nil || dbuser == nil {
 		c.jsonResult(enums.JRCodeFailed,"用户名或密码错误","")
@@ -56,8 +56,8 @@ func (c *HomeController)Login() {
 			c.jsonResult(enums.JRCodeFailed, "用户被禁用，不可登录", "")
 		}
 		//保存用户信息到session beego的orm用法
-		//c.setDBUser2Session(dbuser.Id)
-		c.SetSession("db_user",dbuser)
+		c.setDBUser2Session(dbuser)
+		//c.SetSession("db_user",dbuser)
 		////删除指定的session
 		//c.DelSession("loginuser")
 		////销毁全部的session
@@ -66,6 +66,13 @@ func (c *HomeController)Login() {
 		//c.ServeJSON();
 		/////////////////////////////////
 
+		//c.SetSecureCookie()
+		randStr := utils.CreateRandStr()
+		mp := make(map[string]string,0)
+		mp[enums.Jti] = randStr
+		mp[enums.Account] = dbuser.Account
+		mp[enums.Key] = ""
+		token := utils.CreateJWT(mp)
 		//获取用户信息
 		c.jsonResult(enums.JRCodeSucc, "登录成功", "")
 	}

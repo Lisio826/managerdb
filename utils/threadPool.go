@@ -1,6 +1,6 @@
 package utils
 
-import "github.com/panjf2000/ants/v2"
+import "github.com/panjf2000/ants"
 
 var TPool *ants.Pool
 

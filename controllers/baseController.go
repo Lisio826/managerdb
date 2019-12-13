@@ -60,19 +60,20 @@ func (c *BaseController) jsonResult(code enums.JsonResultCode, msg string, obj i
 }
 
 ////SetBackendUser2Session 获取用户信息（包括资源UrlFor）保存至Session
-//func (c *BaseController) setDBUser2Session(userId int) error {
-//	m, err := models.DBUserOne(userId)
-//	if err != nil {
-//		return err
-//	}
-//	////获取这个用户能获取到的所有资源列表
-//	//resourceList := models.ResourceTreeGridByUserId(userId, 1000)
-//	//for _, item := range resourceList {
-//	//	m.ResourceUrlForList = append(m.ResourceUrlForList, strings.TrimSpace(item.UrlFor))
-//	//}
-//	c.SetSession("db_user", *m)
-//	return nil
-//}
+func (c *BaseController) setDBUser2Session(user *models.TManageUser) error {
+	//m, err := models.DBUserOne(userId)
+	//if err != nil {
+	//	return err
+	//}
+	////获取这个用户能获取到的所有资源列表
+	//resourceList := models.ResourceTreeGridByUserId(userId, 1000)
+	//for _, item := range resourceList {
+	//	m.ResourceUrlForList = append(m.ResourceUrlForList, strings.TrimSpace(item.UrlFor))
+	//}
+	c.SetSession("db_user", user)
+
+	return nil
+}
 
 ////从session里取用户信息
 //func (c *BaseController) adapterUserInfo() {

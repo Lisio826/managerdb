@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	MainLogger *zap.SugaredLogger
+	mainLogger *zap.SugaredLogger
 	GatewayLogger *zap.SugaredLogger
 	RedisLogger *zap.SugaredLogger
 	LmdbLogger *zap.Logger
@@ -23,61 +23,61 @@ func init() {
 }
 func InitLog()  {
 	managerPath := conf.Global.LogPath.LogLocal
-	MainLogger = NewLogger(managerPath, zapcore.DebugLevel, 1, 2, 7, true, "Main").Sugar()
+	mainLogger = NewLogger(managerPath, zapcore.DebugLevel, 1, 2, 7, true, "Main").Sugar()
 }
 
 func Debug(args ...interface{}) {
-	MainLogger.Debug(args...)
+	mainLogger.Debug(args...)
 }
 
 func Debugf(template string, args ...interface{}) {
-	MainLogger.Debugf(template, args...)
+	mainLogger.Debugf(template, args...)
 }
 
 func Info(args ...interface{}) {
-	MainLogger.Info(args...)
+	mainLogger.Info(args...)
 }
 
 func Infof(template string, args ...interface{}) {
-	MainLogger.Infof(template, args...)
+	mainLogger.Infof(template, args...)
 }
 
 func Warn(args ...interface{}) {
-	MainLogger.Warn(args...)
+	mainLogger.Warn(args...)
 }
 
 func Warnf(template string, args ...interface{}) {
-	MainLogger.Warnf(template, args...)
+	mainLogger.Warnf(template, args...)
 }
 
 func Error(args ...interface{}) {
-	MainLogger.Error(args...)
+	mainLogger.Error(args...)
 }
 
 func Errorf(template string, args ...interface{}) {
-	MainLogger.Errorf(template, args...)
+	mainLogger.Errorf(template, args...)
 }
 
 func DPanic(args ...interface{}) {
-	MainLogger.DPanic(args...)
+	mainLogger.DPanic(args...)
 }
 
 func DPanicf(template string, args ...interface{}) {
-	MainLogger.DPanicf(template, args...)
+	mainLogger.DPanicf(template, args...)
 }
 
 func Panic(args ...interface{}) {
-	MainLogger.Panic(args...)
+	mainLogger.Panic(args...)
 }
 
 func Panicf(template string, args ...interface{}) {
-	MainLogger.Panicf(template, args...)
+	mainLogger.Panicf(template, args...)
 }
 
 func Fatal(args ...interface{}) {
-	MainLogger.Fatal(args...)
+	mainLogger.Fatal(args...)
 }
 
 func Fatalf(template string, args ...interface{}) {
-	MainLogger.Fatalf(template, args...)
+	mainLogger.Fatalf(template, args...)
 }

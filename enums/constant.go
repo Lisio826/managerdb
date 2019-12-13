@@ -11,6 +11,11 @@ const (
 
 	UserEnabled = true
 	UserDisabled = false
+
+	Jti = "jti"
+	Account = "account"
+	Key = "key"
+	Admin = "admin"
 )
 
 const (

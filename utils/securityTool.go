@@ -8,6 +8,9 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"github.com/dgrijalva/jwt-go"
+	"managerdb/logger"
+	"time"
 )
 
 var privateKey = []byte(`-----BEGIN RSA PRIVATE KEY-----
@@ -81,3 +84,50 @@ func String2md5(str string) string {
 //	ctx.Write([]byte(text))
 //	return hex.EncodeToString(ctx.Sum(nil))
 //}
+
+
+func CreateJWT(mp map[string]string) string {
+	t := jwt.New(jwt.SigningMethodHS256)
+	claims := make(jwt.MapClaims)
+	claims["iat"] = time.Now().Unix()
+	claims["nbf"] = time.Now().Unix()
+	claims["exp"] = time.Now().Add(time.Hour * time.Duration(2)).Unix()
+	//claims["exp"] = time.Now().Add(time.Second * time.Duration(2)).Unix()
+	if len(mp) > 0 {
+		for k,v := range mp{
+			claims[k] = v
+		}
+	}
+	//claims["jti"] = str
+	//claims["admin"] = 0
+	//claims.["key"] =
+	//claims["account"] = "username"
+	t.Claims = claims
+	ts,err := t.SignedString([]byte(str))
+	if err != nil {
+		return ""
+	}
+	return ts
+	//fmt.Println("=======================================")
+	//time.Sleep(time.Second * 1)
+}
+
+func ValidJWT(str string) (jwt.MapClaims,error) {
+	t := jwt.New(jwt.SigningMethodHS256)
+	ts,err := t.SignedString([]byte(str))
+	if err != nil {
+		logger.Error(err)
+		return nil,errors.New("无效 token, 解析失败")
+	}
+	to,err := jwt.Parse(ts, func(token *jwt.Token) (i interface{}, e error) {
+		return []byte(str),nil
+	})
+	if to.Valid {
+		cl,ok := to.Claims.(jwt.MapClaims)
+		if ok {
+			//fmt.Println(cl["name"].(string))
+			return cl,nil
+		}
+	}
+	return nil,errors.New("无效 token，验证失败")
+}

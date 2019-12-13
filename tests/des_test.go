@@ -3,7 +3,7 @@ package test
 import (
 	"fmt"
 	"io/ioutil"
-	"managerdb/log"
+	"managerdb/logger"
 	"math/rand"
 	"net/http"
 	"testing"
@@ -48,7 +48,7 @@ func randInt32(min, max int32) int32 {
 
 func Test_Des(t *testing.T) {
 
-	log.MonitorLogger.Info("PanicError==》》--" + fmt.Sprint("aaaaaaaaaaaaaaaaaaaa"))
+	logger.Info("PanicError==》》--" + fmt.Sprint("aaaaaaaaaaaaaaaaaaaa"))
 
 	//i := 1
 	//for i <= 15 {
