@@ -4,8 +4,8 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/plugins/cors"
 	"managerdb/conf"
+	"managerdb/dbmodels"
 	"managerdb/logger"
-	"managerdb/models"
 	_ "managerdb/routers"
 )
 
@@ -32,7 +32,8 @@ func init() {
 
 	conf.Global.GetConf()
 	logger.InitLog()
-	models.InitDb()
+	dbmodels.InitDb()
+	dbmodels.InitRedisServer()
 }
 
 func main() {

@@ -1,10 +1,9 @@
 package controllers
 
 import (
-	"encoding/base64"
+	"managerdb/dbmodels"
 	"managerdb/enums"
-	"managerdb/logger"
-	"managerdb/models"
+	"managerdb/service"
 	"managerdb/utils"
 )
 
@@ -27,36 +26,18 @@ func (c *HomeController)Login() {
 	//	c.jsonResult(enums.JRCodeFailed, "用户名或密码不正确", "")
 	//}
 
-	var user models.TManageUser
+	var user dbmodels.TManageUser
 	data := c.Ctx.Input.RequestBody
 	//json数据封装到user对象中
 	ok := utils.Byte2Struct(data, &user)
 	if !ok && (len(user.Account) == 0 || len(user.UserPwd) == 0) {
 		c.jsonResult(enums.JRCodeFailed, "用户名或密码不正确", "")
 	}
+	jsonResult := service.Login(&user)
 
-	//username := utils.DecodeRSA(user.UserName)
-	//userpwd := utils.DecodeRSA(user.UserPwd)
-	//私钥
-	decodeBytesId, _ := base64.StdEncoding.DecodeString(user.Account)
-	id, err := utils.RsaDecrypt(decodeBytesId) //RSA解密
-	username := string(id)
-	decodeBytesPwd, _ := base64.StdEncoding.DecodeString(user.UserPwd)
-	pwd, err := utils.RsaDecrypt(decodeBytesPwd) //RSA解密
-	userpwd := string(pwd)
-
-	userpwd = utils.String2md5(userpwd+enums.PwdSalt)
-	logger.Debug(userpwd)
-	dbuser, err := models.FindDBUserOneByUserName(username,userpwd)
-	if err != nil || dbuser == nil {
-		c.jsonResult(enums.JRCodeFailed,"用户名或密码错误","")
-	}
-	if dbuser != nil{
-		if dbuser.UserStatus == enums.UserDisabled{
-			c.jsonResult(enums.JRCodeFailed, "用户被禁用，不可登录", "")
-		}
+	if enums.JRCodeSucess == jsonResult.Code {
 		//保存用户信息到session beego的orm用法
-		c.setDBUser2Session(dbuser)
+		c.setDBUser2Session(&user)
 		//c.SetSession("db_user",dbuser)
 		////删除指定的session
 		//c.DelSession("loginuser")
@@ -70,12 +51,13 @@ func (c *HomeController)Login() {
 		randStr := utils.CreateRandStr()
 		mp := make(map[string]string,0)
 		mp[enums.Jti] = randStr
-		mp[enums.Account] = dbuser.Account
-		mp[enums.Key] = ""
+		mp[enums.Account] = user.Account
+		mp[enums.Key] = randStr
 		token := utils.CreateJWT(mp)
-		//获取用户信息
-		c.jsonResult(enums.JRCodeSucc, "登录成功", "")
+		c.Ctx.SetCookie("rand",randStr,"/")
+		c.Ctx.SetCookie("token",token,"/")
+		//c.SetSession("rand",randStr)
+		//c.SetSession("token",token)
 	}
-
-
+	c.jsonResult(jsonResult.Code,jsonResult.Msg,jsonResult.Obj)
 }

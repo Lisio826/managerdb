@@ -2,3 +2,19 @@ ignoredbs: information_schema,performance_schema,mysql,sys,test
 logPath:
   logLocal: ./logs/manager.log
   logdb: ./logs/db.log
+mysql:
+  ip: localhost:3306
+  username: root
+  password: 123456
+  database: managerdb
+redis:
+  addr: localhost:6379
+  password:
+  db: 0
+  maxRetries: 3
+  dialTimeout: 10
+  readTimeout: 5
+  writeTimeout: 5
+  poolSize: 20
+  poolTimeout: 30
+  idleTimeout: 5

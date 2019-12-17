@@ -12,9 +12,32 @@ type LogPath struct {
 	Logdb    string `yaml:"logdb"`
 	LogLocal string `yaml:"logLocal"`
 }
+
+type MysqlServer struct {
+	Ip       string `yaml:ip`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
+	Database string `yaml:"database"`
+}
+
+type RedisServer struct {
+	Addr         string `yaml:"addr"`
+	Password     string `yaml:"password"`
+	DB           int    `yaml:"db"`
+	MaxRetries   int    `yaml:"maxRetries"`
+	DialTimeout  int    `yaml:"dialTimeout"`
+	ReadTimeout  int    `yaml:"readTimeout"`
+	WriteTimeout int    `yaml:"writeTimeout"`
+	PoolSize     int    `yaml:"poolSize"`
+	PoolTimeout  int    `yaml:"poolTimeout"`
+	IdleTimeout  int    `yaml:"idleTimeout"`
+}
+
 type config struct {
-	Ignoredbs string  `yaml:"ignoredbs"`
-	LogPath   LogPath `yaml:"logPath"`
+	Ignoredbs   string      `yaml:"ignoredbs"`
+	LogPath     LogPath     `yaml:"logPath"`
+	MysqlServer MysqlServer `yaml:"mysql"`
+	RedisServer RedisServer `yaml:"redis"`
 }
 
 func (c *config) GetConf() config {
@@ -28,4 +51,3 @@ func (c *config) GetConf() config {
 	}
 	return *c
 }
-

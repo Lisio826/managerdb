@@ -2,15 +2,15 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
+	"managerdb/dbmodels"
 	"managerdb/enums"
 	"managerdb/logger"
-	"managerdb/models"
 )
 type BaseController struct {
 	beego.Controller
 	controllerName string        //当前控制名称
 	actionName     string        //当前action名称
-	curUser        models.TManageUser //当前用户信息
+	curUser        dbmodels.TManageUser //当前用户信息
 }
 //var l *zap.SugaredLogger
 //func InitLog() {
@@ -53,14 +53,14 @@ func (c *BaseController) checkLogin() {
 }
 
 func (c *BaseController) jsonResult(code enums.JsonResultCode, msg string, obj interface{}) {
-	r := &models.JsonResult{code, msg, obj}
+	r := &dbmodels.JsonResult{code, msg, obj}
 	c.Data["json"] = r
 	c.ServeJSON()
 	c.StopRun()
 }
 
 ////SetBackendUser2Session 获取用户信息（包括资源UrlFor）保存至Session
-func (c *BaseController) setDBUser2Session(user *models.TManageUser) error {
+func (c *BaseController) setDBUser2Session(user *dbmodels.TManageUser) error {
 	//m, err := models.DBUserOne(userId)
 	//if err != nil {
 	//	return err

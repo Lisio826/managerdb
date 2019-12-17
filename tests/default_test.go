@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"github.com/astaxie/beego"
+	"gopkg.in/redis.v5"
 	_ "managerdb/routers"
 	"path/filepath"
 	"runtime"
@@ -24,6 +25,17 @@ func TestBeego(t *testing.T) {
 	ssname := "获取%s数据失败"
 	ssname = fmt.Sprintf(ssname,"福建")
 	fmt.Println(ssname)
+
+
+	client := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+	pong, err := client.Ping().Result()
+	fmt.Println(pong, err)
+
+
 	//r, _ := http.NewRequest("GET", "/", nil)
 	//w := httptest.NewRecorder()
 	//beego.BeeApp.Handlers.ServeHTTP(w, r)
