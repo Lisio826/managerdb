@@ -8,6 +8,7 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"github.com/astaxie/beego"
 	"github.com/dgrijalva/jwt-go"
 	"managerdb/logger"
 	"time"
@@ -130,4 +131,24 @@ func ValidJWT(str string) (jwt.MapClaims,error) {
 		}
 	}
 	return nil,errors.New("无效 token，验证失败")
+}
+
+func CreateJWT1(mp map[string]string) (tokenString string) {
+	// 带权限创建令牌
+	claims := make(jwt.MapClaims)
+	claims["exp"] = time.Now().Add(time.Hour * 480).Unix() //20天有效期，过期需要重新登录获取token
+	if len(mp) > 0 {
+		for k,v := range mp{
+			claims[k] = v
+		}
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	// 使用自定义字符串加密 and get the complete encoded token as a string
+	tokenString, err := token.SignedString([]byte("mykey"))
+	if err != nil {
+		beego.Error("jwt.SignedString:", err)
+	}
+	return
+	//fmt.Println("=======================================")
+	//time.Sleep(time.Second * 1)
 }

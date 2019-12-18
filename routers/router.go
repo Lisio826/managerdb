@@ -3,20 +3,12 @@ package routers
 import (
 	"github.com/astaxie/beego"
 	"managerdb/controllers"
-	"strings"
-)
 
-var FilterUser = func(ctx *context.Context){
-	_, ok := ctx.Input.Session("uid").(string)
-	ok2 := strings.Contains(ctx.Request.RequestURI, "/login")
-	if !ok && !ok2{
-		ctx.Redirect(302, "/login/index")
-	}
-}
+)
 
 func init() {
 
-	beego.InsertFilter("/",beego.BeforeRouter, FilterUser)
+	beego.InsertFilter("/",beego.BeforeRouter, controllers.FilterUser)
 
 	beego.Router("/", &controllers.MainController{})
 

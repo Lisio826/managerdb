@@ -1,10 +1,14 @@
 package controllers
 
 import (
+	"errors"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/context"
+	"github.com/dgrijalva/jwt-go"
 	"managerdb/dbmodels"
 	"managerdb/enums"
 	"managerdb/logger"
+	"strings"
 )
 type BaseController struct {
 	beego.Controller
@@ -50,6 +54,61 @@ func (c *BaseController) checkLogin() {
 		}
 		c.StopRun()
 	}
+}
+var FilterUser = func(ctx *context.Context){
+	_, ok := ctx.Input.Session("uid").(string)
+	ok2 := strings.Contains(ctx.Request.RequestURI, "/login")
+	if !ok && !ok2{
+		ctx.Redirect(302, "/login/index")
+	}
+}
+// ParseToken parse JWT token in http header.
+func (c *BaseController) ParseToken() (t *jwt.Token, e error) {
+	authString := c.Ctx.Input.Header("Authorization")
+	logger.Debug("AuthString:", authString)
+
+	kv := strings.Split(authString, " ")
+	if len(kv) != 2 || kv[0] != "Bearer" {
+		logger.Error("AuthString invalid:", authString)
+		return nil, errors.New("无效的验证码")
+	}
+	tokenString := kv[1]
+
+	// Parse token
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return []byte("mykey"), nil
+	})
+	if err != nil {
+		logger.Error("Parse token:", err)
+		if ve, ok := err.(*jwt.ValidationError); ok {
+			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
+				// That's not even a token
+				return nil, errInputData
+			} else if ve.Errors&(jwt.ValidationErrorExpired|jwt.ValidationErrorNotValidYet) != 0 {
+				// Token is either expired or not active yet
+				return nil, errExpired
+			} else {
+				// Couldn't handle this token
+				return nil, errInputData
+			}
+		} else {
+			// Couldn't handle this token
+			return nil, errInputData
+		}
+	}
+	if !token.Valid {
+		logger.Error("Token invalid:", tokenString)
+		return nil, errInputData
+	}
+	////////////
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		logger.Error(errPermission)
+		return
+	}
+	var user string = claims["username"].(string)
+	/////////////////////////
+	return token, nil
 }
 
 func (c *BaseController) jsonResult(code enums.JsonResultCode, msg string, obj interface{}) {
