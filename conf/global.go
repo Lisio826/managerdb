@@ -32,9 +32,13 @@ type RedisServer struct {
 	PoolTimeout  int    `yaml:"poolTimeout"`
 	IdleTimeout  int    `yaml:"idleTimeout"`
 }
+type Other struct {
+	Ignoredbs string `yaml:"ignoredbs"`
+	Sercet    string `yaml:"sercet"`
+}
 
 type config struct {
-	Ignoredbs   string      `yaml:"ignoredbs"`
+	Other       Other       `yaml:"other"`
 	LogPath     LogPath     `yaml:"logPath"`
 	MysqlServer MysqlServer `yaml:"mysql"`
 	RedisServer RedisServer `yaml:"redis"`

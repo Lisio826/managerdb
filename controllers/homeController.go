@@ -1,10 +1,12 @@
 package controllers
 
 import (
+	"managerdb/conf"
 	"managerdb/dbmodels"
 	"managerdb/enums"
 	"managerdb/service"
 	"managerdb/utils"
+	"net/http"
 )
 
 type HomeController struct {
@@ -54,8 +56,13 @@ func (c *HomeController)Login() {
 		mp[enums.Account] = user.Account
 		mp[enums.Key] = randStr
 		token := utils.CreateJWT(mp)
-		c.Ctx.SetCookie("rand",randStr,"/")
-		c.Ctx.SetCookie("token",token,"/")
+		cookie := http.Cookie{Name: "Authorization", Value: token, Path: "/", MaxAge: 3600}
+		secret := conf.Global.Other.Sercet
+		c.Ctx.SetSecureCookie(secret,"tk","/",cookie)
+		c.Ctx.SetCookie("rd",randStr,"/")
+		//http.SetCookie()
+		//c.Ctx.SetCookie("rand",randStr,"/")
+		//c.Ctx.SetCookie("token",token,"/")
 		//c.SetSession("rand",randStr)
 		//c.SetSession("token",token)
 	}

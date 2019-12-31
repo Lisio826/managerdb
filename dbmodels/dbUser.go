@@ -6,7 +6,7 @@ import (
 )
 
 type TManageUser struct {
-	Account		string	`json:"account"`
+	Account     string    `json:"account" xorm:"-"`
 	Id          int       `json:"id"`
 	FullName    string    `json:"fullName"`
 	Surname     string    `json:"surname"`

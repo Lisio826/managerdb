@@ -6,6 +6,7 @@ import (
 	"managerdb/enums"
 	"managerdb/logger"
 	"managerdb/utils"
+	"strings"
 )
 
 func Login(user *dbmodels.TManageUser) (jsonResult dbmodels.JsonResult) {
@@ -13,15 +14,15 @@ func Login(user *dbmodels.TManageUser) (jsonResult dbmodels.JsonResult) {
 	//userpwd := utils.DecodeRSA(user.UserPwd)
 	//私钥
 	decodeBytesId, _ := base64.StdEncoding.DecodeString(user.Account)
-	id, _ := utils.RsaDecrypt(decodeBytesId) //RSA解密
-	username := string(id)
+	code, _ := utils.RsaDecrypt(decodeBytesId) //RSA解密
+	usercode := string(code)
 	decodeBytesPwd, _ := base64.StdEncoding.DecodeString(user.UserPwd)
 	pwd, _ := utils.RsaDecrypt(decodeBytesPwd) //RSA解密
 	userpwd := string(pwd)
 
-	userpwd = utils.String2md5(userpwd+enums.PwdSalt)
+	userpwd = strings.ToUpper(utils.String2md5(userpwd+enums.PwdSalt))
 	logger.Debug(userpwd)
-	dbuser, _ := dbmodels.FindDBUserOneByUserName(username,userpwd)
+	dbuser, _ := dbmodels.FindDBUserOneByUserName(usercode,userpwd)
 	if dbuser != nil{
 		if dbuser.UserStatus == enums.UserDisabled{
 			jsonResult = dbmodels.JsonResult{enums.JRCodeFailed, "用户被禁用，不可登录", ""}

@@ -1,4 +1,3 @@
-ignoredbs: information_schema,performance_schema,mysql,sys,test
 logPath:
   logLocal: ./logs/manager.log
   logdb: ./logs/db.log
@@ -18,3 +17,6 @@ redis:
   poolSize: 20
   poolTimeout: 30
   idleTimeout: 5
+other:
+  ignoredbs: information_schema,performance_schema,mysql,sys,test
+  sercet: fdsfaf$#@FDS@#4323

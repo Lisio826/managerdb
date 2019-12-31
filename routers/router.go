@@ -10,6 +10,8 @@ func init() {
 
 	beego.InsertFilter("/",beego.BeforeRouter, controllers.FilterUser)
 
+
+
 	beego.Router("/", &controllers.MainController{})
 
 	//路由设置
