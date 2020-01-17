@@ -32,7 +32,7 @@ func NewLogger(filePath string, level zapcore.Level, maxSize int, maxBackups int
 	//return zap.New(core, caller, development, filed)
 
 	// 构造日志
-	return zap.New(core, development, filed)
+	return zap.New(core, zap.AddCallerSkip(1), development, filed)
 }
 
 /**

@@ -2,11 +2,11 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/context"
 	"managerdb/conf"
 	"managerdb/dbmodels"
 	"managerdb/enums"
 	"managerdb/logger"
-	"net/http"
 	"strings"
 )
 type BaseController struct {
@@ -61,14 +61,15 @@ func (c *BaseController) checkLogin() {
 //		ctx.Redirect(302, "/login/index")
 //	}
 //}
-var FilterUser = func(ctx *BaseController){
+var FilterUser = func(ctx *context.Context){
 	//_, ok := ctx.Input.Session("uid").(string)
 	secret := conf.Global.Other.Sercet
-	_,ok := ctx.Ctx.GetSecureCookie(secret,"tk")
-	ok2 := strings.Contains(ctx.Ctx.Request.RequestURI, "/login")
+	_,ok := ctx.GetSecureCookie(secret,"tk")
+	ok2 := strings.Contains(ctx.Request.RequestURI, "/login")
 	if !ok && !ok2{
-		returnURL := ctx.Ctx.Request.URL.Path
-		ctx.jsonResult(http.StatusForbidden,"请先登录,才可以操作",returnURL)
+		ctx.Redirect(302, ctx.Request.URL.Path)
+		//returnURL := ctx.Request.URL.Path
+		//ctx.jsonResult(http.StatusForbidden,"请先登录,才可以操作",returnURL)
 	}
 }
 
